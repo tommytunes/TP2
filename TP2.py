@@ -22,9 +22,9 @@ for row in c:
     if row[3] == 'cote_rangement':
         continue
     bibliotheque = {row[3] : {row[0] : 'titre', row[1] : 'auteur', row[2] : 'date_publication'}}
-    print(bibliotheque)
+    #print(bibliotheque)
 
-print(f' \n Bibliotheque initial : {c} \n')
+#print(f' \n Bibliotheque initial : {c} \n')
 
 csv_collecbiblio.close()
 
@@ -34,6 +34,18 @@ csv_collecbiblio.close()
 
 # TODO : Écrire votre code ici
 
+nouvelle_bibliotheque = {}
+
+nouvelle_collection = open('nouvelle_collection.csv', newline ='')
+
+d = csv.reader(nouvelle_collection)
+
+for row in d:
+    if row[3] == 'cote_rangement':
+        continue
+    nouvelle_bibliotheque = {row[3] : {row[0] : 'titre', row[1] : 'auteur', row[2] : 'date_publication'}}
+    bibliotheque.update(nouvelle_bibliotheque)
+    print(nouvelle_bibliotheque)
 
 
 
