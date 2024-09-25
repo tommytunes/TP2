@@ -11,9 +11,22 @@ Noms et matricules : Nom1 (Matricule1), Nom2 (Matricule2)
 ########################################################################################################## 
 
 # TODO : Écrire votre code ici
+import csv
 
-print("salut")
+bibliotheque = {}
+csv_collecbiblio = open('collection_bibliotheque.csv', newline ='')
 
+c = csv.reader(csv_collecbiblio)
+
+for row in c:
+    if row[3] == 'cote_rangement':
+        continue
+    bibliotheque = {row[3] : {row[0] : 'titre', row[1] : 'auteur', row[2] : 'date_publication'}}
+    print(bibliotheque)
+
+print(f' \n Bibliotheque initial : {c} \n')
+
+csv_collecbiblio.close()
 
 ########################################################################################################## 
 # PARTIE 2 : Ajout d'une nouvelle collection à la bibliothèque
