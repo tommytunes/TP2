@@ -18,13 +18,13 @@ csv_collecbiblio = open('collection_bibliotheque.csv', newline ='')
 
 c = csv.reader(csv_collecbiblio)
 
-for row in c:
+for row in c: # for cle, item in d.items():
     if row[3] == 'cote_rangement':
         continue
-    bibliotheque = {row[3] : {row[0] : 'titre', row[1] : 'auteur', row[2] : 'date_publication'}}
-    #print(bibliotheque)
+    bibliotheque[row[3]] = {'titre' : row[0], 'auteur' : row[1] , 'date_publication' : row[2]}
+    print(f' \n Bibliotheque initial : {bibliotheque[row[3]]} \n')
 
-#print(f' \n Bibliotheque initial : {c} \n')
+
 
 csv_collecbiblio.close()
 
@@ -34,19 +34,23 @@ csv_collecbiblio.close()
 
 # TODO : Écrire votre code ici
 
-nouvelle_bibliotheque = {}
-
 nouvelle_collection = open('nouvelle_collection.csv', newline ='')
 
 d = csv.reader(nouvelle_collection)
 
-for row in d:
-    if row[3] == 'cote_rangement':
-        continue
-    nouvelle_bibliotheque = {row[3] : {row[0] : 'titre', row[1] : 'auteur', row[2] : 'date_publication'}}
-    bibliotheque.update(nouvelle_bibliotheque)
-    print(nouvelle_bibliotheque)
+for row_2 in d:
+    
+    titre = row_2[0]
+    auteur = row_2[1]
+    date_publication = row_2[2]
+    new_cote = row_2[3]
 
+    if new_cote in bibliotheque:
+       print(f"Le livre {new_cote} ---- {titre} par {auteur} ---- est déjà présent dans la bibliothèque")
+      
+    else:
+       bibliotheque[new_cote] = {'titre' : titre, 'auteur' : auteur, 'date_publication' : date_publication}
+       print(f"Le livre {new_cote} ---- {titre} par {auteur} ---- a été ajouté avec succès")
 
 
 
@@ -57,7 +61,9 @@ for row in d:
 
 # TODO : Écrire votre code ici
 
-
+for row_3 in range(22, 45):
+    bibliotheque['WS0'+ str(row_3)] = bibliotheque.pop('S0'+str(row_3))
+    print("\n Bibliotheque avec modifications de cote :" "WS0" + str(row_3))
 
 
 
