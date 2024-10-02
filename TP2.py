@@ -6,17 +6,16 @@ csv_collecbiblio = open('collection_bibliotheque.csv', newline ='')
 
 c = csv.reader(csv_collecbiblio)
 
-for row in c: # for cle, item in d.items():
+for row in c: 
     if row[3] == 'cote_rangement':
         continue
     bibliotheque[row[3]] = {'titre' : row[0], 'auteur' : row[1] , 'date_publication' : row[2]}
-    #print(f' \n Bibliotheque initial : {bibliotheque[row[3]]} \n')
-
+   
+for livre in bibliotheque.items():
+    print(f' \n Bibliotheque initiale : {livre} \n')
 
 
 csv_collecbiblio.close()
-
-
 
 
 #NOUVELLE BIBLIO
@@ -48,9 +47,8 @@ for row_3 in nouvelle_bibliotheque:
     if bibliotheque[row_3]['auteur'] == 'William Shakespeare':
         bibliotheque['W' + row_3] = bibliotheque.pop(row_3) 
 
-#print(f' \n Bibliotheque initial : {bibliotheque} \n')
-
-
+for livre in bibliotheque.items():
+    print(f' \n Bibliotheque avec modifications de cote : {livre} \n')
 
 
 
@@ -81,67 +79,40 @@ for cote in bibliotheque:
         'date_emprunt': date
     })
 
-
-
-## Part 5
-
-from datetime import datetime, timedelta, date
+for livre in bibliotheque.items():
+    print(f'\n Bibliotheque avec ajout des emprunts : {livre} \n')
 
 
 
+##Part 5
+
+from datetime import datetime
 csv_collecbiblio = open("emprunts.csv", newline='')
 fichier_a_lire_date = csv.reader(csv_collecbiblio)
 
+for livre in fichier_a_lire_date:
+
+    cote = livre[0]
+    if livre[1] == 'date_emprunt' and cote == 'cote_rangement':
+        continue
+
+    date_emprunt = datetime.fromisoformat(livre[1])
+    date_difference = (datetime.today() - date_emprunt).days
+    date_limite = date_difference - 30
+        
+    if date_limite > 0:
+        frais = min(2 * date_limite, 100)
+        bibliotheque[cote].update({'frais_retard' : frais})
 
 
-today = datetime.now()
-frais = {}
-frais_valeur = 0
-NomTitre = {}
+    if date_difference > 365:
 
-
-
-for cote in bibliotheque: 
-    if bibliotheque[cote]['date_emprunt'] != None:
-        date_emprunt_valeur = datetime.fromisoformat(bibliotheque[cote]['date_emprunt']) 
-        date_limite = date_emprunt_valeur + timedelta(days=30)  # Ajouter 30 jours
-        jours_en_retard = (today - date_limite).days 
-        date = bibliotheque[cote]['date_emprunt']
-        NomTitre[cote] = {'titre' : None}
-
-        if  jours_en_retard > 0:
-            frais_valeur = min(2 * jours_en_retard, 100)
-            frais[cote] = {'frais' : frais_valeur }
-            NomTitre[cote] = {'titre' : None}
-
-            if jours_en_retard > 365:
-                NomTitre[cote] = {'titre' : bibliotheque[cote]['titre']}
-            
-            else: 
-                NomTitre[cote] = {'titre' : None}
-        else: 
-            frais_valeur = 0
-            frais[cote] = {'frais' : frais_valeur }
-            NomTitre[cote] = {'titre' : None}
-
-            
-
-    else:
-        date = None
-        jours_en_retard = 0
-        frais_valeur = 0
-        frais[cote] = {'frais' : frais_valeur }
-        NomTitre[cote] = {'titre' : None}
-
-    bibliotheque[cote].update({'frais_retard' : frais[cote], 'liste_perdus' : NomTitre[cote] })
-                         
-
+        bibliotheque[cote].update({'perdus' : livre[0]})
+    
 
 
 for livre in bibliotheque.items():
-    print(f'Bibliotheque initial FINAL: {livre}' )
-
-
+       print(f'\n Bibliotheque avec ajout des retards et frais : {livre}\n ')
 
 
 
