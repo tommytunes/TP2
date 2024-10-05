@@ -1,4 +1,15 @@
-# CREATION PREMIERE BIBLIO
+"""
+TP2 : Système de gestion de livres pour une bibliothèque
+
+Groupe de laboratoire : 05
+Numéro d'équipe :  26
+Noms et matricules :Thomas Staples (2371342), Mohamed Amine Mahboubi (2391873)
+"""
+
+########################################################################################################## 
+# PARTIE 1 : Création du système de gestion et ajout de la collection actuelle
+########################################################################################################## 
+
 import csv
 
 bibliotheque = {}
@@ -17,6 +28,11 @@ for livre in bibliotheque.items():
 
 csv_collecbiblio.close()
 
+
+
+########################################################################################################## 
+# PARTIE 2 : Ajout d'une nouvelle collection à la bibliothèque
+########################################################################################################## 
 
 #NOUVELLE BIBLIO
 nouvelle_collection = open('nouvelle_collection.csv', newline ='')
@@ -39,8 +55,11 @@ for row_2 in d:
             print(f"Le livre {new_cote} ---- {titre} par {auteur} ---- a été ajouté avec succès")
 
 
-###PART3:
-# TODO : Écrire votre code ici
+
+########################################################################################################## 
+# PARTIE 3 : Modification de la cote de rangement d'une sélection de livres
+########################################################################################################## 
+
 nouvelle_bibliotheque = bibliotheque.copy()
 
 for row_3 in nouvelle_bibliotheque:
@@ -53,7 +72,10 @@ for livre in bibliotheque.items():
 
 
 
-###PART 4
+
+########################################################################################################## 
+# PARTIE 4 : Emprunts et retours de livres
+########################################################################################################## 
 
 csv_collecbiblio = open("emprunts.csv", newline='')
 fichier_a_lire = csv.reader(csv_collecbiblio)
@@ -84,35 +106,48 @@ for livre in bibliotheque.items():
 
 
 
-##Part 5
 
-from datetime import datetime
+########################################################################################################## 
+# PARTIE 5 : Livres en retard 
+########################################################################################################## 
+
+
+import datetime
+
 csv_collecbiblio = open("emprunts.csv", newline='')
 fichier_a_lire_date = csv.reader(csv_collecbiblio)
 
-for livre in fichier_a_lire_date:
 
-    cote = livre[0]
-    if livre[1] == 'date_emprunt' and cote == 'cote_rangement':
-        continue
+for cote in bibliotheque:
 
-    date_emprunt = datetime.fromisoformat(livre[1])
-    date_difference = (datetime.today() - date_emprunt).days
-    date_limite = date_difference - 30
+
+    if bibliotheque[cote]['emprunts'] == 'emprunté' :
+        date = (datetime.date.today() - datetime.date.fromisoformat(bibliotheque[cote]['date_emprunt'])).days
+        frais = 2 * (date - 30)
+
+        if frais > 100:
+            frais = 100
+
+        if date > 365:
+            bibliotheque[cote]['frais'] = frais
+            bibliotheque[cote]['livre_perdus'] = 'perdus'
+            
+
+        elif date > 30:
+            bibliotheque[cote]['frais'] = frais
+            bibliotheque[cote]['livre_perdus'] = None
         
-    if date_limite > 0:
-        frais = min(2 * date_limite, 100)
-        bibliotheque[cote].update({'frais_retard' : frais})
+        else:
+            frais = 0
+            bibliotheque[cote]['frais'] = frais
+            bibliotheque[cote]['livre_perdus'] = None 
 
 
-    if date_difference > 365:
-
-        bibliotheque[cote].update({'perdus' : livre[0]})
-    
-
+    else:
+        frais = 0
+        bibliotheque[cote]['frais'] = frais
+        bibliotheque[cote]['livre_perdus'] = None
 
 for livre in bibliotheque.items():
        print(f'\n Bibliotheque avec ajout des retards et frais : {livre}\n ')
-
-
 
