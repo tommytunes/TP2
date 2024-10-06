@@ -101,8 +101,10 @@ for cote in bibliotheque:
         'date_emprunt': date
     })
 
+
+
 for livre in bibliotheque.items():
-    print(f'\n Bibliotheque avec ajout des emprunts : {livre} \n')
+   print(f'\n Bibliotheque avec ajout des emprunts : {livre} \n')
 
 
 
@@ -148,6 +150,10 @@ for cote in bibliotheque:
         bibliotheque[cote]['frais'] = frais
         bibliotheque[cote]['livre_perdus'] = None
 
+for livre, details in bibliotheque.items():
+    if details['frais'] > 0:
+        print(f"Liste des livres en retard avec leurs frais respectifs: {livre} - {details['frais']}$\n")
+
 for livre in bibliotheque.items():
-       print(f'\n Bibliotheque avec ajout des retards et frais : {livre}\n ')
+    print(f'\n Bibliotheque avec ajout des retards et frais : {livre}\n ')
 
